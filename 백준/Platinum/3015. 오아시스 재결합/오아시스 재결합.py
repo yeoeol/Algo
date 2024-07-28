@@ -3,28 +3,27 @@ input = sys.stdin.readline
 
 n = int(input())
 
-arr = [int(input()) for _ in range(n)]
-
 stack = []
 result = 0
 
 for i in range(n):
-    while stack and stack[-1][1] < arr[i]:
+    per = int(input())
+    while stack and stack[-1][1] < per:
         result += stack.pop()[0]
 
     if not stack:
-        stack.append((1, arr[i]))
+        stack.append((1, per))
         continue
 
-    if arr[i] == stack[-1][1]:
+    if per == stack[-1][1]:
         cnt = stack.pop()[0]
         result += cnt
 
         if stack:
             result += 1
-        stack.append((cnt+1, arr[i]))
+        stack.append((cnt+1, per))
     else:
-        stack.append((1, arr[i]))
+        stack.append((1, per))
         result += 1
 
 print(result)
