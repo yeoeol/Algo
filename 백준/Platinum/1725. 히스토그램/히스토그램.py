@@ -1,12 +1,15 @@
+import sys
+
+input = sys.stdin.readline
+
 n = int(input())
 
 arr = []
-for _ in range(n):
-    arr.append(int(input()))
-
 stack = []
 M = -1
+
 for i in range(n):
+    arr.append(int(input()))
     ind = i
     while stack and stack[-1][1] > arr[i]:
         ind, height = stack.pop()
