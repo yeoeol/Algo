@@ -3,11 +3,18 @@ import sys
 sys.setrecursionlimit(10**6)
 input = sys.stdin.readline
 
+def dfs(s):
+    visited[s] = 1
+    for i in tree[s]:
+        if visited[i] == 0:
+            dfs(i)
+            dp[s][1] += min(dp[i][1], dp[i][0])
+            dp[s][0] += dp[i][1]
 
 
 n = int(input().rstrip())
 tree = [[] for _ in range(n+1)]
-dp = [[0, 0] for _ in range(n+1)]
+dp = [[0, 1] for _ in range(n+1)]
 
 for _ in range(n-1):
     a, b = map(int, input().rstrip().split())
@@ -21,18 +28,6 @@ for _ in range(n-1):
 
 
 visited = [0] * (n+1)
-def dfs(s):
-    visited[s] = 1
-    if len(tree[s]) == 0:
-        dp[s][0] = 0
-        dp[s][1] = 1
-    else:
-        for i in tree[s]:
-            if visited[i] == 0:
-                dfs(i)
-                dp[s][1] += min(dp[i][1], dp[i][0])
-                dp[s][0] += dp[i][1]
-        dp[s][1] += 1
 
 dfs(1)
 print(min(dp[1][0], dp[1][1]))
