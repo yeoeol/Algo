@@ -8,15 +8,11 @@ lst = deque([i for i in range(1, n+1)])
 arr = list(map(int, input().strip().split()))
 
 ind = 0
-p = lst.popleft()
-print(p, end=' ')
 while lst:
-    if arr[p-1] >= 0:
-        for i in range(arr[p-1]-1):
-            lst.append(lst.popleft())
-        p = lst.popleft()
-    elif arr[p-1] < 0:
-        for i in range(abs(arr[p-1])-1):
-            lst.appendleft(lst.pop())
-        p = lst.pop()
+    p = lst.popleft()
+    ind = arr[p-1]
+    if ind >= 0:
+        lst.rotate(-(ind-1))
+    elif ind < 0:
+        lst.rotate(-ind)
     print(p, end=' ')
