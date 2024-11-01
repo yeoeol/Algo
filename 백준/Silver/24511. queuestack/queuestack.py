@@ -1,19 +1,18 @@
 import sys
-from collections import deque
 
-input = sys.stdin.readline
+if __name__ == '__main__':
+    N = int(sys.stdin.readline().rstrip())
+    A = list(map(int, sys.stdin.readline().strip().split()))
+    B = list(map(int, sys.stdin.readline().strip().split()))
+    BB = [B[n] for n in range(N) if A[n] == 0]
+    BB.reverse()
 
-queue = []
-n = int(input().strip())
-A = list(map(int, input().strip().split())) # 0:queue, 1:stack
-B = list(map(int, input().strip().split()))
-for i in range(n):
-    if A[i] == 0:
-        queue.append(B[i])
-queue.reverse()
-
-m = int(input().strip())
-C = list(map(int, input().strip().split()))
-
-queue = queue+C
-print(*queue[:m])
+    M = int(input())
+    C = list(map(int, sys.stdin.readline().strip().split()))
+    if (len(BB) >= M) :
+        print(*BB[:M])
+    elif (len(BB) == 0):
+        print(*C[:M])
+    else :
+        print(*BB, end=' ')
+        print(*C[:M - len(BB)])
