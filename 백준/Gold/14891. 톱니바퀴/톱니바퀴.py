@@ -31,15 +31,7 @@ for i in range(k):
 
 total = 0
 for i in range(len(wheel)):
-    if wheel[i][0] == 0:
-        continue
-    if i == 0:
-        total += 1
-    elif i == 1:
-        total += 2
-    elif i == 2:
-        total += 4
-    else:
-        total += 8
+    if wheel[i][0] == 1:
+        total += 2 ** i
 
 print(total)
