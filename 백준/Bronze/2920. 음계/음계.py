@@ -1,10 +1,9 @@
-nums = list(map(int, input().split()))
-ans = [1,2,3,4,5,6,7,8]
-rev_ans = list(reversed(ans))
+a = list(map(int, input().split()))
 
-if nums == ans:
-    print("ascending")
-elif nums == rev_ans:
-    print("descending")
+if a == sorted(a):
+    print('ascending')
+elif a == sorted(a, reverse=True):
+    print('descending')
 else:
-    print("mixed")
+    print('mixed')
+ 
