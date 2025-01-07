@@ -1,7 +1,7 @@
 origin_s = list(input())
 
 result = []
-for i in range(1, len(origin_s)+1):
+for i in range(1, len(origin_s)-1):
     for j in range(i+1, len(origin_s)):
         f = origin_s[:i]
         s = origin_s[i:j]
@@ -9,6 +9,6 @@ for i in range(1, len(origin_s)+1):
         f.reverse()
         s.reverse()
         t.reverse()
-        result.append("".join(f)+"".join(s)+"".join(t))
-result.sort()
-print(result[0])
+        result.append("".join(f+s+t))
+
+print(sorted(result)[0])
