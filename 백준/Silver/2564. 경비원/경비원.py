@@ -1,57 +1,24 @@
+def get_distance(x, y):
+    if x == 1:  # 북
+        return y
+    if x == 2:  # 남
+        return garo + sero + garo - y
+    if x == 3:  # 서
+        return garo + sero + garo + sero - y
+    if x == 4:  # 동
+        return garo + y
+
 garo, sero = map(int, input().split()) # 블록의 x최대 좌표, y최대 좌표
 n = int(input()) # 상점의 개수
 
-store = {}
-for i in range(1, 5):
-    store[i] = []
-for _ in range(n):
-    b, loc = tuple(map(int, input().split()))
-    store[b].append(loc)
+store = []
+for _ in range(n+1):
+    b, loc = map(int, input().split())
+    store.append(get_distance(b, loc))
 
-cur_b, cur_loc = map(int, input().split())
 total = 0
-
-for i in range(1, 5):
-    lst = store[i]
-    for j in lst:
-        if cur_b == 1:
-            if i == 1:
-                total += abs(j-cur_loc)
-            elif i == 2:
-                total += min((garo-cur_loc+garo-j), (cur_loc+j))
-                total += sero
-            elif i == 3:
-                total += cur_loc+j
-            elif i == 4:
-                total += garo-cur_loc+j
-        elif cur_b == 2:
-            if i == 1:
-                total += min((garo-cur_loc+garo-j), (cur_loc+j))
-                total += sero
-            elif i == 2:
-                total += abs(j-cur_loc)
-            elif i == 3:
-                total += cur_loc+sero-j
-            elif i == 4:
-                total += garo-cur_loc+sero-j
-        elif cur_b == 3:
-            if i == 1:
-                total += cur_loc+j
-            elif i == 2:
-                total += sero-cur_loc+j
-            elif i == 3:
-                total += abs(j-cur_loc)
-            elif i == 4:
-                total += min((sero-cur_loc+sero-j), (cur_loc+j))
-                total += garo
-        elif cur_b == 4:
-            if i == 1:
-                total += cur_loc+garo-j
-            elif i == 2:
-                total += sero-cur_loc+garo-j
-            elif i == 3:
-                total += min((sero-cur_loc+sero-j), (cur_loc+j))
-                total += garo
-            elif i == 4:
-                total += abs(cur_loc-j)
+for i in range(n):
+    in_course = abs(store[-1]-store[i])
+    out_course = (garo+sero)*2 - in_course
+    total += min(in_course, out_course)
 print(total)
