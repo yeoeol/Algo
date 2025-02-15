@@ -1,51 +1,44 @@
-import copy
-from collections import deque
-
-N, L, R = map(int, input().split())
-
-graph = []
-for _ in range(N):
-    graph.append(list(map(int, input().split())))
-
-dx = [-1, 1, 0, 0]
-dy = [0, 0, -1, 1]
-def bfs(graph, x, y, visited):
-    queue = deque([(x, y)])
-    visited[x][y] = True
-    uni = [(x, y)]
-    while queue:
-        px, py = queue.popleft()
+import sys
+from collections import deque 
+N, L, R = map(int, sys.stdin.readline().split())
+pan = [list(map(int, sys.stdin.readline().split())) for _ in range(N)]
+# 연합이 될 수 있는지?를 확인하고 만약 된다면 하나로 묶어 인구수/칸의 개수를 구하고 각 칸에 값을 넣는다.
+# 이를 연합이 될 수 없을 때까지 반복한다.
+# 그 때 소요된 날짜를 출력한다.
+q = deque()
+dx = [1,0,-1,0]
+dy = [0,1,0,-1]
+def bfs(x,y):
+    q.append((x,y))
+    union = []
+    union.append((x,y))
+    while q:
+        a,b = q.popleft()
         for i in range(4):
-            nx, ny = px+dx[i], py+dy[i]
-            if 0 <= nx < N and 0 <= ny < N:
-                if (L <= abs(graph[px][py]-graph[nx][ny]) <= R) and (not visited[nx][ny]):
-                    uni.append((nx, ny))
-                    visited[nx][ny] = True
-                    queue.append((nx, ny))
-
-    return uni
-
-
-def sort_graph(graph, union):
-    total = 0
-    divisor = len(union)
-    for ux, uy in union:
-        total += graph[ux][uy]
-    for ux, uy in union:
-        graph[ux][uy] = total//divisor
-
-time = 0
-while True:
-    visited = [[False]*N for _ in range(N)]
-    temp = copy.deepcopy(graph)
+            na = a + dx[i]
+            nb = b + dy[i]
+            if na>=N or nb>=N or nb<0 or na<0 or visited[na][nb]==1:
+                continue
+            if R>=abs(pan[a][b]-pan[na][nb])>=L:
+                visited[na][nb] = 1
+                q.append((na,nb))
+                union.append((na,nb))
+    if len(union)<=1:
+        return 0
+    result=sum(pan[a][b] for a,b in union)//len(union)
+    for a,b in union:
+        pan[a][b] = result
+    return 1
+day = 0
+while 1:
+    stop = 0
+    visited = [[0]*N for _ in range(N)]
     for i in range(N):
         for j in range(N):
-            if not visited[i][j]:
-                union = bfs(graph, i, j, visited)
-                sort_graph(graph, union)
-
-    if temp == graph:
-        print(time)
+            if visited[i][j] == 0:
+                visited[i][j] = 1
+                stop += bfs(i,j)
+    if stop==0:
         break
-    else:
-        time += 1
+    day += 1
+print(day)
