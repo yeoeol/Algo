@@ -1,13 +1,10 @@
 def solution(enroll, referral, seller, amount):
     parent = dict()
-    for i in range(len(enroll)):
-        if referral[i] == '-':
-            parent[enroll[i]] = None
-        else:
-            parent[enroll[i]] = referral[i]
+    for e, r in zip(enroll, referral):
+        parent[e] = r
 
     def dfs(start, money):
-        if start is None:
+        if start == '-':
             return
         ten = money*10//100
         result[start] += money-ten
