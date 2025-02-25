@@ -9,46 +9,29 @@ def solution(friends, gifts):
     # 각 friend에게 번호 부여 -> dict()
     # 이후 각각의 인덱스에 맞게 gifts 배열 돌면서 개수 증가시키기 -> O(n) - 10000
     n = len(friends)
-    index = dict()
-    name = dict()
-    gift_score = dict()
-    come = dict()
-    for i, f in enumerate(friends):
-        index[f] = i
-        name[i] = f
-        gift_score[f] = 0
-        come[f] = 0
+    gift_score = [0]*n
+    result = [0]*n
+
+    friend = {f: i for i, f in enumerate(friends)}
 
     graph = [[0]*n for _ in range(n)]
     for gift in gifts:
-        splits = gift.split(" ")
-        s = splits[0]
-        s1 = splits[1]
-
-        a = index[splits[0]]
-        b = index[splits[1]]
-        graph[a][b] += 1
+        a, b = gift.split(" ")
+        graph[friend[a]][friend[b]] += 1
 
     for i in range(n):
-        for j in range(n):
-            gift_score[name[i]] -= graph[j][i]
-        gift_score[name[i]] += sum(graph[i])
+        gift_score[i] = sum(graph[i]) - sum([k[i] for k in graph])
 
-    print(gift_score)
-    print('--------------------')
     # 그래프를 순회하면서 0이 아니라면 (i, j) 의 값과 (j, i)의 값을 비교해서 더 작은 수에 있는 사람이
     for i in range(n):
         for j in range(n):
-            if graph[i][j] < graph[j][i]:
+            if graph[i][j] > graph[j][i]:
                 # 큰 수의 사람에게 선물을 줌 (해당 사람의 come[idx] += 1)
-                come[name[j]] += 1
-            elif graph[i][j] > graph[j][i]:
-                come[name[i]] += 1
-            else:
-                if gift_score[name[i]] < gift_score[name[j]]:
-                    come[name[j]] += 1
-                elif gift_score[name[i]] > gift_score[name[j]]:
-                    come[name[i]] += 1
+                result[i] += 1
+            elif graph[i][j] == graph[j][i]:
+                if gift_score[i] > gift_score[j]:
+                    result[i] += 1
+
     # 그래프의 (i,j) == (j, i)라면 gift_score 를 비교해서 작은 사람이 큰 사람에게 선물
         # 이때, 선물 지수까지 같다면 주고받지 않음
-    return max(come.values())//2
+    return max(result)
