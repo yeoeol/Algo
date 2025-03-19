@@ -32,3 +32,12 @@ def has_same_number(row1, row2):
         for col in range(1, m + 1)
     ])
 ```
+
+## 1-based index로 2차원 배열 입력받기
+```python
+n = map(int, input().split())
+arr = [[0] * (n+1)] + [
+    [0]+list(map(int, input().split())) 
+    for _ in range(n)
+]
+```
