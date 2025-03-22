@@ -70,15 +70,8 @@ def get_arr(clock):
             arr.append(grid[nx][ny])
             x, y = nx, ny
 
-
-def rotate_arr(arr):
-    arr.pop()
-    arr.appendleft(0)
-    return arr
-
-
 # 시계 방향으로 돌리기
-def real_rotate(arr, clock):
+def real_rotate(clock):
     if clock:
         x, y = air_cleaner[0][0], air_cleaner[0][1]
         dxs = [0, -1, 0, 1]
@@ -89,30 +82,27 @@ def real_rotate(arr, clock):
         dys = [1, 0, -1, 0]
 
     dir_num = 0
-    for num in arr:
+
+    prev = 0
+    while True:
         dx, dy = dxs[dir_num], dys[dir_num]
         nx, ny = x+dx, y+dy
         if not in_range(nx, ny):
             dir_num = (dir_num+1) % 4
-            dx, dy = dxs[dir_num], dys[dir_num]
-            nx, ny = x+dx, y+dy
-            grid[nx][ny] = num
-            x, y = nx, ny
-        else:
-            grid[nx][ny] = num
-            x, y = nx, ny
+            continue
+        if grid[nx][ny] == -1:
+            break
+
+        grid[nx][ny], prev = prev, grid[nx][ny]
+        x, y = nx, ny
 
 
 def air(): # O(n+m)
     # 위쪽(반시계로)
-    arr = get_arr(True) # O(n+m)
-    arr = rotate_arr(arr) # O(1)
-    real_rotate(arr, True) # O(n+m)
+    real_rotate(True) # O(n+m)
 
     # 아래쪽 (시계로)
-    arr2 = get_arr(False)
-    arr2 = rotate_arr(arr2)
-    real_rotate(arr2, False)
+    real_rotate(False)
 
 get_air_cleaner() # 공기 청정기 위치(한 번만 실행)
 for _ in range(t):
