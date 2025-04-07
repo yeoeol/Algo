@@ -6,17 +6,17 @@ for i in range(1, n+1):
     prefix[i] = prefix[i-1]+arr[i]
 
 ans = 0
+cnt = 0
 for i in range(x, n+1):
     visitor = prefix[i]-prefix[i-x]
-    ans = max(ans, visitor)
-    
+    if ans < visitor:
+        ans = visitor
+        cnt = 1
+    elif ans == visitor:
+        cnt += 1
+
 if ans == 0:
     print("SAD")
 else:
-    cnt = 0
-    for i in range(x, n+1):
-        visitor = prefix[i]-prefix[i-x]
-        if ans == visitor:
-            cnt += 1
     print(ans)
     print(cnt)
