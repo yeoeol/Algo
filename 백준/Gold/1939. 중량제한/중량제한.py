@@ -1,35 +1,45 @@
-n, m = map(int, input().split())
+from collections import deque
+import sys
+input = sys.stdin.readline
 
-def find(x):
-    if parent[x] == x:
-        return x
-    parent[x] = find(parent[x])
-    return parent[x]
+def bfs(weight): # weight == now
+	queue = deque()
+	queue.append(one)
+	visited = [False] * (n+1)
+	visited[one] = True
+	
+	while queue:
+		x= queue.popleft() # w == limit
+		
+		for i,w in bridges[x]:
+			if not visited[i] and w >= weight:
+				visited[i] = True
+				queue.append(i)
+	
+	if visited[two]: return True
+	else: return False
+	
+n, m = map(int,input().split())
+bridges = [[] for _ in range(n+1)]
 
-def union(x, y):
-    x, y = find(x), find(y)
-    parent[x] = y
+for i in range(m):
+	a,b,c = map(int,input().split())
+	bridges[a].append([b,c])
+	bridges[b].append([a,c])
+	
+one, two = map(int,input().split())
 
-edges = [tuple(map(int, input().split())) for _ in range(m)]
-edges.sort(key=lambda x:x[2], reverse=True)
-x1, x2 = map(int, input().split())
+start = 1
+end = 1000000000
 
-left = 1
-right = max(edges, key=lambda x:x[2])[2]
-ans = 0
-while left <= right:
-    mid = (left+right)//2
-    parent = [i for i in range(n+1)]
-
-    for a, b, c in edges:
-        if c >= mid:
-            union(a, b)
-            if find(x1) == find(x2):
-                break
-    if find(x1) == find(x2):
-        ans = mid
-        left = mid+1
-    else:
-        right = mid-1
-
-print(ans)
+result = 0
+while start <= end:
+	mid = (start + end) //2
+	
+	if bfs(mid):
+		result = mid
+		start = mid + 1
+	else:
+		end = mid - 1
+		
+print(result)
