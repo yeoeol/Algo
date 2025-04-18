@@ -20,10 +20,7 @@ for i in range(1, n+1):
             break
         j += 1
 
-    ans = max(ans, sum(cnt.values()))
-
-    if j+1 > n:
-        break
+    ans = max(ans, j-i+1)
 
     cnt[arr[i]] -= 1
     if cnt[arr[i]] == 0:
