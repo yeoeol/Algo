@@ -1,18 +1,18 @@
-from collections import defaultdict
-
 n = int(input())
-names = [input() for _ in range(n)]
+player_list = []
+result = []
 
-dic = defaultdict(int)
-for name in names:
-    dic[name[0]] += 1
+for _ in range(n):
+    a = input()
+    player_list.append(a[0])
 
-ans = []
-for key, value in dic.items():
-    if value >= 5:
-        ans.append(key)
-if ans:
-    ans.sort()
-    print(''.join(ans))
+first_names = set(player_list)
+
+for i in first_names:
+    if player_list.count(i) >= 5:
+        result.append(i)
+
+if len(result) > 0:
+    print(''.join(sorted(result)))
 else:
     print("PREDAJA")
