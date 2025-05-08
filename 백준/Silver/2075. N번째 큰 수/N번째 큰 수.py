@@ -7,6 +7,7 @@ n = int(input())
 queue = list(map(int, input().split()))
 for _ in range(n-1):
     for num in map(int, input().split()):
-        heapq.heappushpop(queue, num)
+        if queue[0] < num:
+            heapq.heappushpop(queue, num)
 
-print(heapq.heappop(queue))
+print(queue[0])
