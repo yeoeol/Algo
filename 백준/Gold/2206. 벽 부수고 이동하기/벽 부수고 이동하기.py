@@ -1,7 +1,8 @@
 import sys
 from collections import deque
 
-sys.setrecursionlimit(10**6)
+def input():
+    return sys.stdin.readline().strip()
 
 n, m = map(int, input().split())
 grid = [list(input()) for _ in range(n)]
@@ -31,10 +32,8 @@ def bfs(x, y, visited):
                     queue.append((nx, ny, cnt+1, 1))
                     visited[nx][ny][1] = True
 
-    return sys.maxsize
+    return -1
 
 visited = [[[False]*2 for _ in range(m)] for _ in range(n)]
-cnt = bfs(0, 0, visited)
-
-print(cnt if cnt != sys.maxsize else -1)
+print(bfs(0, 0, visited))
 
