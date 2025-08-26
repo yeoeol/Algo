@@ -1,67 +1,64 @@
+import sys
 from collections import deque
 
+
+def input():
+    return sys.stdin.readline().strip()
+
 n = int(input())
-space = []
-for _ in range(n):
-    space.append(list(map(int, input().split())))
 
-fishes = []
-x, y = 0, 0
+grid = []
+bx, by = 0, 0
 for i in range(n):
+    arr = list(map(int, input().split()))
     for j in range(n):
-        if space[i][j] == 9:
-            x, y = i, j
-        elif space[i][j] != 0:
-            fishes.append((i, j))
+        if arr[j] == 9:
+            bx, by = i, j
+    grid.append(arr)
 
-
-dx = [-1, 1, 0, 0]
-dy = [0, 0, -1, 1]
-
-
-def bfs(x, y, baby_size):
-    graph = [[0]*n for _ in range(n)]
+def find_edible_fishes(x, y, baby_size):
     visited = [[False]*n for _ in range(n)]
-    queue = deque([(x, y)])
+    visited[x][y] = True
+
+    queue = deque([(x, y, 0)])
+    min_dist = float('inf')
+
+    fishes = []
     while queue:
-        px, py = queue.popleft()
-        visited[px][py] = True
-        for i in range(4):
-            nx = px+dx[i]
-            ny = py+dy[i]
-            if 0 <= nx < n and 0 <= ny < n:
-                if baby_size < space[nx][ny]:
-                    continue
-                else:
-                    if graph[nx][ny] == 0 and not visited[nx][ny]:
-                        graph[nx][ny] = graph[px][py]+1
-                        queue.append((nx, ny))
-    return graph
-
-time = 0
-baby_shark_size = 2
-eat_fish = 0
-
-while fishes:
-    dist = bfs(x, y, baby_shark_size)
-    fishes.sort(key=lambda x: (dist[x[0]][x[1]], x[0], x[1]))
-    # print(x, y)
-    # for d in dist: print(d)
-    # print(fishes)
-    # print('--------------------')
-    for i in range(len(fishes)):
-        fx, fy = fishes[i][0], fishes[i][1]
-        if dist[fx][fy] != 0 and space[fx][fy] < baby_shark_size:
-            time += dist[fx][fy]
-            space[x][y] = 0
-            space[fx][fy] = 0
-            eat_fish += 1
-            if eat_fish == baby_shark_size:
-                eat_fish = 0
-                baby_shark_size += 1
-            x, y = fx, fy
-            fishes.pop(i)
+        x, y, dist = queue.popleft()
+        if dist > min_dist:
             break
-    else:
+
+        if 0 < grid[x][y] < baby_size:
+            fishes.append((dist, x, y))
+            min_dist = dist
+            continue
+
+        for dx, dy in [(-1, 0), (0, -1), (0, 1), (1, 0)]:
+            nx, ny = x+dx, y+dy
+            if 0 <= nx < n and 0 <= ny < n and not visited[nx][ny]:
+                if grid[nx][ny] <= baby_size:
+                    visited[nx][ny] = True
+                    queue.append((nx, ny, dist+1))
+
+    return sorted(fishes)
+
+grid[bx][by] = 0
+res = 0
+eat = 0
+baby_size = 2
+while True:
+    edible_fishes = deque(find_edible_fishes(bx, by, baby_size))
+
+    if len(edible_fishes) == 0:
         break
-print(time)
+    else:
+        t, bx, by = edible_fishes.popleft()
+        fish_size = grid[bx][by]
+        grid[bx][by] = 0
+        res += t
+        eat += 1
+        if eat == baby_size:
+            baby_size += 1
+            eat = 0
+print(res)
