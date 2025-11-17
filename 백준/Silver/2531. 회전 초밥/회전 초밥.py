@@ -1,5 +1,5 @@
 import sys
-from collections import deque, defaultdict
+from collections import defaultdict
 
 
 def input():
@@ -7,27 +7,21 @@ def input():
 
 
 n, d, k, c = map(int, input().split())
-queue = []
-for _ in range(n):
-    queue.append(int(input()))
+queue = [int(input()) for _ in range(n)]
 
 dic = defaultdict(int)
 for i in range(k):
     dic[queue[i]] += 1
+dic[c] += 1
 max_val = len(dic)
 
-i = 0
-j = k-1
-while i < n:
-    if dic[queue[i]] != 0:
-        dic[queue[i]] -= 1
-        if dic[queue[i]] == 0:
-            del dic[queue[i]]
+i, j = 0, k-1
+for _ in range(n):
+    dic[queue[i]] -= 1
+    if dic[queue[i]] == 0: del dic[queue[i]]
     i += 1
     j = (j+1)%n
     dic[queue[j]] += 1
-    temp = set(dic.keys())
-    temp.add(c)
-    max_val = max(max_val, len(temp))
+    max_val = max(max_val, len(dic))
 
 print(max_val)
