@@ -21,7 +21,7 @@ def bfs(grid, x, y, tx, ty):
     queue = deque()
     queue.append((x, y, 0, 0))
     dup = set()
-    dup.add((x, y, 0))
+    dup.add((x, y))
     
     while queue:
         x, y, d, cnt = queue.popleft()
@@ -29,8 +29,8 @@ def bfs(grid, x, y, tx, ty):
             nx, ny = move(grid, x, y, i)
             if nx == tx and ny == ty:
                 return cnt+1
-            if (nx, ny, i) not in dup:
-                dup.add((nx, ny, i))
+            if (nx, ny) not in dup:
+                dup.add((nx, ny))
                 queue.append((nx, ny, i, cnt+1))
     return -1
 
