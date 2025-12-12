@@ -17,17 +17,15 @@ def move(grid, x, y, d):
             return (x, y)
         x, y = nx, ny
         
-def bfs(grid, x, y, tx, ty):
-    queue = deque()
-    queue.append((x, y, 0, 0))
+def bfs(grid, queue):
     dup = set()
-    dup.add((x, y))
     
     while queue:
         x, y, d, cnt = queue.popleft()
+        dup.add((x, y))
         for i in range(4):
             nx, ny = move(grid, x, y, i)
-            if nx == tx and ny == ty:
+            if grid[nx][ny] == 'G':
                 return cnt+1
             if (nx, ny) not in dup:
                 dup.add((nx, ny))
@@ -36,17 +34,10 @@ def bfs(grid, x, y, tx, ty):
 
 
 def solution(board):
-    grid = []
-    x, y = 0, 0
-    tx, ty = 0, 0
+    queue = deque()
     for i in range(len(board)):
-        arr = []
         for j in range(len(board[0])):
             if board[i][j] == 'R':
-                x, y = i, j
-            elif board[i][j] == 'G':
-                tx, ty = i, j
-            arr.append(board[i][j])
-        grid.append(arr)
+                queue.append((i, j, 0, 0))
         
-    return bfs(grid, x, y, tx, ty)
+    return bfs(board, queue)
