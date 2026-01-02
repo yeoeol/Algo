@@ -11,9 +11,9 @@ for _ in range(n):
     t = lst[0]
     arr = lst[1:]
     counter = Counter(arr)
-    for k, v in counter.items():
-        if v > t//2:
-            print(k)
-            break
+    max_num = max(counter, key=counter.get)
+    if counter[max_num] > t//2:
+        print(max_num)
     else:
         print("SYJKGW")
+
