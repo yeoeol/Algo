@@ -1,12 +1,5 @@
 def solution(k, d):
     answer = 0
-    max_a = d // k
-
-    for a in range(max_a + 1):
-        remain = d*d - (a*k)*(a*k)
-        if remain < 0:
-            break
-        max_b = int((remain ** 0.5) // k)
-        answer += max_b + 1
-
+    for a in range(0, d+1, k):
+        answer += ((d**2 - a**2)**(1/2))//k + 1
     return answer
