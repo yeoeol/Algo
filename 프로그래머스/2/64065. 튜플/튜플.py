@@ -1,17 +1,14 @@
 def solution(s):
-    arr = s[2:len(s)-2].split("},{")
-    for i, items in enumerate(arr):
-        arr[i] = list(map(int, items.split(",")))
-    arr.sort(key=lambda x:len(x))
+    s1 = s.lstrip('{').rstrip('}').split("},{")
+    arr = [list(map(int, i.split(","))) for i in s1]
+    arr.sort(key=len)
     
-    sets = set()
     res = []
-    n = len(arr)
-    for i in range(n):
-        sets2 = set(arr[i])
-        p = (sets2-sets).pop()
-        res.append(p)
-        sets.add(p)
+    for items in arr:
+        for i in range(len(items)):
+            if items[i] not in res:
+                res.append(items[i])
+                break
         
     return res
         
