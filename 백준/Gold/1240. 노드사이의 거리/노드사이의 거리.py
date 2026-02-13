@@ -11,17 +11,18 @@ for _ in range(n-1):
     graph[a].append((b, l))
     graph[b].append((a, l))
 
-def dfs(s, e, visited, cnt):
-    global ans
-
+def dfs(s, e, visited):
     if s == e:
-        ans = cnt
-        return
+        return 0
 
     for nxt, d in graph[s]:
         if not visited[nxt]:
             visited[nxt] = True
-            dfs(nxt, e, visited, cnt+d)
+            result = dfs(nxt, e, visited)
+            if result is not None:
+                return result + d
+    
+    return None
 
 answer = []
 for _ in range(m):
@@ -29,8 +30,6 @@ for _ in range(m):
     visited = [False] * (n+1)
     visited[s] = True
 
-    ans = 0
-    dfs(s, e, visited, 0)
-    answer.append(ans)
+    answer.append(dfs(s, e, visited))
 
 print(*answer, sep='\n')
