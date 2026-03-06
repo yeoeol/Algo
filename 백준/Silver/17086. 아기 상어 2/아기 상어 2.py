@@ -6,31 +6,28 @@ grid = [list(map(int, input().split())) for _ in range(n)]
 dxs = [-1, -1, 0, 1, 1, 1, 0, -1]
 dys = [0, 1, 1, 1, 0, -1, -1, -1]
 
-ans = 0
-
 def in_range(x, y):
     return 0 <= x < n and 0 <= y < m
 
-def bfs(grid, x, y):
-    queue = deque()
-    queue.append((x, y, 0))
-    visited = [[False] * m for _ in range(n)]
-    visited[x][y] = True
-
-    while queue:
-        x, y, dist = queue.popleft()
-        if grid[x][y] == 1:
-            return dist
+def bfs():
+    while sharks:
+        x, y = sharks.popleft()
         for dx, dy in zip(dxs, dys):
             nx, ny = x+dx, y+dy
-            if in_range(nx, ny) and not visited[nx][ny]:
-                visited[nx][ny] = True
-                queue.append((nx, ny, dist+1))
-    return 0
+            if in_range(nx, ny) and dist[nx][ny] == 0:
+                dist[nx][ny] = dist[x][y] + 1
+                sharks.append((nx, ny))
 
+dist = []
+sharks = deque()
 for i in range(n):
     for j in range(m):
-        if grid[i][j] == 0:
-            cnt = bfs(grid, i, j)
-            ans = max(ans, cnt)
-print(ans)
+        if grid[i][j] == 1:
+            sharks.append((i, j))
+    dist.append(grid[i])
+    
+bfs()
+ans = 0
+for d in dist:
+    ans = max(ans, max(d))
+print(ans-1)
