@@ -7,11 +7,8 @@ def solution(numbers):
                 bin_num[i] = '1'
                 if i+1 < len(bin_num):
                     bin_num[i+1] = '0'
-                can.append(bin_num)
+                can.append(int(''.join(bin_num), 2))
                 break
         else:
-            can.append(['1', '0'] + bin_num[1:])
-    ans = []
-    for lst in can:
-        ans.append(int(''.join(lst), 2))
-    return ans
+            can.append(int(''.join(['1', '0'] + bin_num[1:]), 2))
+    return can
