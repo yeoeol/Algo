@@ -9,10 +9,11 @@ if k < 5:
     print(0)
     exit()
 
-words = [set(input()) for _ in range(n)]
+learned_set = {'a', 'n', 't', 'i', 'c'}
+words = [set(input()) - learned_set for _ in range(n)]
 visited = [False] * 26
 
-for i in ['a', 'n', 't', 'i', 'c']:
+for i in learned_set:
     visited[ord(i)-97] = True
 
 def dfs(start, cnt):
@@ -35,7 +36,6 @@ def dfs(start, cnt):
             visited[i] = False
             learned_set.remove(chr(i+97))
 
-learned_set = {'a', 'n', 't', 'i', 'c'}
 res = 0
 dfs(0, 0)
 print(res)
