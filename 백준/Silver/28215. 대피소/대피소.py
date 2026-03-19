@@ -1,33 +1,25 @@
-import itertools
+from itertools import combinations
 import sys
+
+def input():
+    return sys.stdin.readline().strip()
 
 n, k = map(int, input().split())
 
 def dist(x1, y1, x2, y2):
     return abs(x1-x2)+abs(y1-y2)
 
-home = []
-nums = dict()
-for i in range(n):
-    x, y = map(int, input().split())
-    home.append((x, y))
-    nums[(x, y)] = i
+home = [tuple(map(int, input().split())) for i in range(n)]
 
 INF = sys.maxsize
 ans = INF
-for selected in itertools.combinations(home, k):
-    sets = set(nums[(x, y)] for x, y in selected)
-    arr = [INF] * n
+for selected in combinations(home, k):
+    cur = -1
     for i in range(n):
-        if i in sets:
-            continue
+        cur_dist = INF
         for sx, sy in selected:
-            arr[i] = min(arr[i], dist(sx, sy, home[i][0], home[i][1]))
-    res = 0
-    for i in range(n):
-        if arr[i] != INF:
-            res = max(arr[i], res)
-    ans = min(ans, res)
+            cur_dist = min(cur_dist, dist(sx, sy, home[i][0], home[i][1]))
+        cur = max(cur, cur_dist)
+    ans = min(ans, cur)
+
 print(ans)
-
-
