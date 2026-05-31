@@ -1,50 +1,29 @@
-import sys
-from copy import copy
+from itertools import product
+import copy
 
-sys.setrecursionlimit(10**7)
+def dfs(p_num, infection_list, edges):
+    stack = copy.deepcopy(infection_list)
+    #print(f"stack:{stack}")
+    while stack:
+        x = stack.pop()
+        for s, e, p in edges:
+            if s == x and p == p_num and e not in infection_list:
+                infection_list.append(e)
+                stack.append(e)
+    return infection_list
 
-def make_graph(edges, n):
-    graph = [[] for _ in range(n+1)]
-    for a, b, c in edges:
-        graph[a].append((b, c))
-        graph[b].append((a, c))
-    return graph
 
-answer = 0
 def solution(n, infection, edges, k):
-    global answer
+    m = len(edges)
+    for i in range(m):
+        s, e, p = edges[i]
+        edges.append([e, s, p])
     answer = 0
-
-    graph = make_graph(edges, n)
-    infected = [False]*(n+1)
-    infected[infection] = True
-    dfs_pipe_sequence(graph, 0, infected, k)
+    for pipe_ord in product([1,2,3], repeat=k):
+        infection_list = [infection]
+        for p_num in pipe_ord:
+            infection_list = dfs(p_num, infection_list, edges)
+            #print(pipe_ord, p_num, infection_list)
+        answer = max(answer, len(infection_list))
 
     return answer
-
-def count(arr):
-    return arr.count(True)
-
-def dfs_same_pipe(graph, x, infected, pipe):
-    for nxt, nxt_pipe in graph[x]:
-        if pipe == nxt_pipe and not infected[nxt]:
-            infected[nxt] = True
-            dfs_same_pipe(graph, nxt, infected, pipe)
-
-def spread_by_pipe(graph, infected, pipe):
-    for node in range(1, len(infected)):
-        if infected[node]:
-            dfs_same_pipe(graph, node, infected, pipe)
-            
-def dfs_pipe_sequence(graph, depth, infected, k):
-    global answer
-
-    answer = max(answer, count(infected))
-
-    if depth == k:
-        return
-
-    for pipe in [1,2,3]:
-        next_infected = copy(infected)
-        spread_by_pipe(graph, next_infected, pipe)
-        dfs_pipe_sequence(graph, depth+1, next_infected, k)
